@@ -6,75 +6,86 @@ PRD: docs/plans/2026-01-29-prd-001-toolcache-library.md
 
 ## Overview
 
-Implement a cache layer for tool execution and discovery with deterministic
-keying, TTLs, and an in-memory backend. Provide middleware for read-through
-behavior.
+Implement caching primitives, deterministic keying, and read-through middleware.
 
 ## TDD Methodology
 
 Each task follows strict TDD:
-1. Red — Write failing test
-2. Red verification — Run test, confirm failure
-3. Green — Minimal implementation
-4. Green verification — Run test, confirm pass
-5. Commit — One commit per task
+1. Red — write failing test
+2. Red verification — run test, confirm failure
+3. Green — minimal implementation
+4. Green verification — run test, confirm pass
+5. Commit — one commit per task
 
 ---
 
 ## Task 0 — Module Scaffolding
-
-Goal: Baseline module files and docs structure.
 
 Commit:
 - chore(toolcache): scaffold module and docs
 
 ---
 
-## Task 1 — Core Interfaces + Keyer
+## Task 1 — Core Interfaces + Errors
 
 Tests:
-- Stable key generation
-- Order-insensitive input normalization
+- TestCacheErrors_NilCache
+- TestCacheInterface_BasicGetSet
 
 Commit:
-- feat(toolcache): add cache interface and keyer
+- feat(toolcache): add cache interface and errors
 
 ---
 
-## Task 2 — TTL Policy
+## Task 2 — Deterministic Keyer
 
 Tests:
-- Default TTL
-- Override TTL per call
+- TestKeyer_DeterministicForMaps
+- TestKeyer_ArrayOrderPreserved
+- TestKeyer_SameInputsSameKey
+
+Commit:
+- feat(toolcache): add deterministic keyer
+
+---
+
+## Task 3 — TTL Policy
+
+Tests:
+- TestPolicy_DefaultTTL
+- TestPolicy_OverrideTTL
+- TestPolicy_DisabledCaching
 
 Commit:
 - feat(toolcache): add ttl policy
 
 ---
 
-## Task 3 — In-memory Backend
+## Task 4 — In-memory Backend
 
 Tests:
-- get/set/delete
-- expiry behavior
+- TestMemoryCache_GetSetDelete
+- TestMemoryCache_Expiry
+- TestMemoryCache_ConcurrentAccess
 
 Commit:
-- feat(toolcache): add memory backend
+- feat(toolcache): add in-memory backend
 
 ---
 
-## Task 4 — Middleware
+## Task 5 — Middleware
 
 Tests:
-- cache hit/miss
-- skip caching for unsafe tools
+- TestMiddleware_CacheHit
+- TestMiddleware_CacheMiss
+- TestMiddleware_SkipUnsafeTags
 
 Commit:
-- feat(toolcache): add middleware
+- feat(toolcache): add read-through middleware
 
 ---
 
-## Task 5 — Docs + Diagrams
+## Task 6 — Docs + Diagrams
 
 Steps:
 - Expand README examples
@@ -98,7 +109,7 @@ Commit:
 ## Stack Integration
 
 1. Add ai-tools-stack component docs + D2 diagram
-2. Add mkdocs import for toolcache repo
+2. Add mkdocs multirepo import
 3. After first release, update version matrix
 
 ---
@@ -106,10 +117,11 @@ Commit:
 ## Commit Order
 
 1. chore(toolcache): scaffold module and docs
-2. feat(toolcache): add cache interface and keyer
-3. feat(toolcache): add ttl policy
-4. feat(toolcache): add memory backend
-5. feat(toolcache): add middleware
-6. docs(toolcache): finalize documentation
-7. docs(ai-tools-stack): add toolcache component docs
-8. chore(ai-tools-stack): add toolcache to version matrix (after release)
+2. feat(toolcache): add cache interface and errors
+3. feat(toolcache): add deterministic keyer
+4. feat(toolcache): add ttl policy
+5. feat(toolcache): add in-memory backend
+6. feat(toolcache): add read-through middleware
+7. docs(toolcache): finalize documentation
+8. docs(ai-tools-stack): add toolcache component docs
+9. chore(ai-tools-stack): add toolcache to version matrix (after release)
