@@ -15,6 +15,13 @@ var (
 
 const MaxKeyLength = 512
 
+// Cache stores tool outputs with TTL semantics.
+//
+// Contract:
+// - Concurrency: implementations must be safe for concurrent use.
+// - Context: methods must honor cancellation/deadlines and return ctx.Err() when canceled.
+// - Errors: invalid keys should return ErrInvalidKey/ErrKeyTooLong via ValidateKey.
+// - Ownership: returned bytes are caller-owned; implementations should copy on write.
 type Cache interface {
 	Get(ctx context.Context, key string) (value []byte, ok bool)
 	Set(ctx context.Context, key string, value []byte, ttl time.Duration) error

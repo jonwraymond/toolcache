@@ -31,6 +31,11 @@ toolrun/toolindex --> toolcache --> backends
 | `Policy` | TTL, size limits, and invalidation rules |
 | `CacheMiddleware` | Wrap execution with cache lookup/store |
 
+### Interface Contracts
+
+- **Cache**: thread-safe; honors context cancellation; `ValidateKey` defines valid keys.
+- **Keyer**: deterministic and thread-safe; returns errors for unsupported inputs.
+
 ## Detailed Usage
 
 ### Basic Setup

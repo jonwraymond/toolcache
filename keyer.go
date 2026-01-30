@@ -8,6 +8,12 @@ import (
 	"sort"
 )
 
+// Keyer derives cache keys from tool input.
+//
+// Contract:
+// - Concurrency: implementations must be safe for concurrent use.
+// - Determinism: identical inputs must yield stable keys.
+// - Errors: invalid inputs should return a descriptive error.
 type Keyer interface {
 	Key(toolID string, input any) (string, error)
 }
